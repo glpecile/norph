@@ -1,12 +1,12 @@
 {
-  "name": "yubel",
+  "name": "norph",
   "version": "0.1.0",
   "description": "Text that morphs into its next value, on iOS, Android, and web. A Reanimated port of torph.",
   "license": "MIT",
   "author": "Gian Luca Pecile",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/glpecile/yubel.git"
+    "url": "git+https://github.com/glpecile/norph.git"
   },
   "keywords": ["react-native", "reanimated", "text", "animation", "morph"],
   "sideEffects": false,

@@ -1,5 +1,5 @@
 {
-  "name": "yubel-example",
+  "name": "norph-example",
   "private": true,
   "main": "index.ts",
   "scripts": {

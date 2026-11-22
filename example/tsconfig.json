@@ -1,4 +1,4 @@
 {
   "extends": "expo/tsconfig.base",
-  "compilerOptions": { "strict": true, "paths": { "yubel": ["../src"] } }
+  "compilerOptions": { "strict": true, "paths": { "norph": ["../src"] } }
 }

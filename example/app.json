@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "yubel",
-    "slug": "yubel-example",
+    "name": "norph",
+    "slug": "norph-example",
     "web": { "output": "single" },
-    "experiments": { "baseUrl": "/yubel/demo" }
+    "experiments": { "baseUrl": "/norph/demo" }
   }
 }

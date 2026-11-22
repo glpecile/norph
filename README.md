@@ -1,13 +1,13 @@
-# yubel
+# norph
 
 Text that morphs into its next value, on iOS, Android, and web. It is a
 Reanimated port of [torph](https://github.com/lochie/torph)'s React component.
 One implementation runs everywhere, on the web through react-native-web.
 
-[Try the live demo](https://glpecile.github.io/yubel/).
+[Try the live demo](https://glpecile.github.io/norph/).
 
 ```tsx
-import { MorphText } from 'yubel';
+import { MorphText } from 'norph';
 
 <MorphText className="text-2xl text-foreground self-start">{count}</MorphText>;
 ```

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, useColorScheme, View } from 'react-native';
-import { MorphText } from 'yubel';
+import { MorphText } from 'norph';
 
 // Each chip steps through its own values; the first press switches to it.
 const SAMPLES = [
