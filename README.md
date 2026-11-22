@@ -6,6 +6,20 @@ One implementation runs everywhere, on the web through react-native-web.
 
 [Try the live demo](https://glpecile.github.io/norph/).
 
+## Install
+
+In an Expo app, `expo install` picks the Reanimated version that matches your SDK:
+
+```sh
+npx expo install norph react-native-reanimated react-native-worklets   # npm
+bunx expo install norph react-native-reanimated react-native-worklets  # bun
+pnpm expo install norph react-native-reanimated react-native-worklets  # pnpm
+```
+
+Outside Expo, add the same three packages with your package manager.
+
+## Use
+
 ```tsx
 import { MorphText } from 'norph';
 
