@@ -118,8 +118,9 @@ const widthOf = (boxes: Map<string, Box>) =>
  * animates its width. The first render, reduced motion, and `numberOfLines`
  * render plain `Text`, and so does the text at rest once a morph ends.
  *
- * Runs one line that never wraps. While it moves, the text sits at the
- * start edge, so shrink-wrap it (`alignSelf`) when alignment matters.
+ * Runs one line that never wraps: at rest, text too long for its box ends in
+ * an ellipsis. While it moves, the text sits at the start edge, so
+ * shrink-wrap it (`alignSelf`) when alignment matters.
  */
 export function MorphText({ children, className, style, numberOfLines }: MorphTextProps) {
   const text = String(children);
@@ -271,7 +272,8 @@ export function MorphText({ children, className, style, numberOfLines }: MorphTe
           </Text>
         </>
       ) : (
-        <Text className={className} style={[style, RESET]}>
+        // One line at rest too, so a morph never unwraps the text.
+        <Text className={className} style={[style, RESET]} numberOfLines={1}>
           {shown.text}
         </Text>
       )}

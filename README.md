@@ -34,7 +34,8 @@ import { MorphText } from 'norph';
 
 ## Limits
 
-- One line. The text does not wrap while it morphs. Newlines are not supported.
+- One line. The text never wraps: at rest, text too long for its box ends in
+  an ellipsis. Newlines are not supported.
 - While it morphs, the text sits at the start edge. Shrink-wrap it
   (`alignSelf`) when alignment matters.
 - One node per glyph loses kerning pairs during a morph.
