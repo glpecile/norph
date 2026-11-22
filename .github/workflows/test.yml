@@ -12,3 +12,7 @@ jobs:
       - run: bun install --frozen-lockfile
       - run: bun test
       - run: bun run typecheck
+      # The example imports the package as an app would, so its type check
+      # catches types that only resolve inside this repo.
+      - run: bun install --frozen-lockfile && bunx tsc --noEmit
+        working-directory: example

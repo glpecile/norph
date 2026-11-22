@@ -23,6 +23,18 @@ import { type Box, planMoves } from './plan';
 
 export { diffSegments, segmentText, type Segment } from './diff';
 
+// `className` reaches the core components when the app resolves it (Uniwind
+// redirects `react-native` imports to components that read it). Elsewhere it
+// is ignored. Declared here, not in a .d.ts, so it loads with every import.
+declare module 'react-native' {
+  interface TextProps {
+    className?: string;
+  }
+  interface ViewProps {
+    className?: string;
+  }
+}
+
 export interface MorphTextProps {
   /** The current text. A change morphs in place. */
   children: string | number;
