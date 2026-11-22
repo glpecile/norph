@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>yubel</title>
+<meta name="description" content="Text that morphs into its next value. One Reanimated component for iOS, Android, and web.">
+<meta property="og:title" content="yubel">
+<meta property="og:description" content="Text that morphs into its next value, on iOS, Android, and web.">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>
+*, *::before, *::after { box-sizing: border-box; min-width: 0; }
+
+:root {
+  color-scheme: light dark;
+  --bg: light-dark(oklch(1 0 none), oklch(0.16 0 none));
+  --fg: light-dark(oklch(0.2 0 none), oklch(0.96 0 none));
+  --muted: light-dark(oklch(0.48 0 none), oklch(0.7 0 none));
+  --line: light-dark(oklch(0.92 0 none), oklch(0.27 0 none));
+  --soft: light-dark(oklch(0.97 0 none), oklch(0.2 0 none));
+  --ring: light-dark(oklch(0.55 0.16 255), oklch(0.72 0.13 255));
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --mono: ui-monospace, "Geist Mono", "SF Mono", Menlo, Consolas, monospace;
+  --text-h1: clamp(1.75rem, 1.5rem + 1vw, 2.25rem);
+  scrollbar-gutter: stable;
+  text-wrap: pretty;
+  overflow-wrap: break-word;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: var(--bg);
+  color: var(--fg);
+  font: 400 1rem/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+h1, h2 { text-wrap: balance; }
+img, svg { display: block; max-width: 100%; height: auto; }
+button, a { touch-action: manipulation; }
+button { user-select: none; -webkit-user-select: none; font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.i { inline-size: 1em; block-size: 1em; flex: none; }
+
+main {
+  --gutter: 1rem;
+  --content: 40rem;
+  --breakout: 46rem;
+  display: grid;
+  grid-template-columns:
+    [full-width-start] minmax(var(--gutter), 1fr)
+    [breakout-start] minmax(0, calc((var(--breakout) - var(--content)) / 2))
+    [content-start] min(100% - var(--gutter) * 2, var(--content)) [content-end]
+    minmax(0, calc((var(--breakout) - var(--content)) / 2)) [breakout-end]
+    minmax(var(--gutter), 1fr) [full-width-end];
+  padding-block: clamp(3rem, 2rem + 4vw, 6rem) 4rem;
+}
+main > * { grid-column: content; }
+main > .breakout { grid-column: breakout; }
+
+.hero { display: grid; justify-items: start; gap: 1rem; margin-block-end: 2.5rem; }
+.hero img { inline-size: 48px; flex: none; }
+h1 { font-size: var(--text-h1); font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; margin: 0; }
+.hero p { margin: 0; color: var(--muted); font-size: 1.0625rem; max-inline-size: 32rem; }
+.actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-block-start: 0.5rem; }
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  block-size: 2.5rem;
+  padding-inline: 1rem;
+  border-radius: 0.625rem;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+}
+.button.primary { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.button:active { transform: scale(0.97); }
+@media (hover: hover) and (pointer: fine) {
+  .button:hover { background: var(--soft); }
+  .button.primary:hover { background: color-mix(in oklch, var(--fg), var(--bg) 15%); }
+}
+
+/* The demo is the real component, exported from example/ with react-native-web. */
+.demo {
+  display: block;
+  inline-size: 100%;
+  block-size: 20rem;
+  border: 1px solid var(--line);
+  border-radius: 0.875rem;
+  background: var(--soft);
+  color-scheme: light dark;
+}
+.hint { color: var(--muted); font-size: 0.875rem; margin: 0.75rem 0 0; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .button, .copy { transition: transform 160ms var(--ease-out); }
+  /* The page enters once: each block rises out of a blur, 60 ms after the one before. */
+  .enter { animation: enter 700ms var(--ease-out) both; animation-delay: calc(var(--i, 0) * 60ms); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .enter { animation: fade 300ms ease both; }
+}
+@keyframes enter { from { opacity: 0; transform: translateY(8px); filter: blur(6px); } }
+@keyframes fade { from { opacity: 0; } }
+
+section { margin-block-start: 3.5rem; }
+h2 { font-size: 1rem; font-weight: 600; margin: 0 0 0.75rem; }
+section > p, section li { color: var(--muted); }
+section > p { margin: 0 0 0.75rem; }
+section > ul { margin: 0; padding-inline-start: 1.25rem; display: grid; gap: 0.375rem; }
+section code { font: 0.875em var(--mono); color: var(--fg); }
+
+.code {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding-inline-end: 0.5rem;
+  margin: 0 0 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 0.625rem;
+  background: var(--soft);
+}
+.code pre {
+  flex: 1;
+  margin: 0;
+  padding: 0.875rem 1rem;
+  overflow-x: auto;
+  font: 400 0.875rem/1.6 var(--mono);
+}
+.code pre code { font: inherit; }
+.copy {
+  flex: none;
+  display: grid;
+  place-items: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  margin-block-start: 0.5rem;
+  border: 1px solid transparent;
+  background: transparent;
+  border-radius: 0.5rem;
+  color: var(--muted);
+  font-size: 1rem;
+  cursor: pointer;
+}
+@media (hover: hover) and (pointer: fine) { .copy:hover { background: var(--bg); border-color: var(--line); color: var(--fg); } }
+.copy:active { transform: scale(0.97); }
+
+.keys { display: grid; grid-template-columns: max-content 1fr; gap: 0.5rem 1.25rem; margin: 0; }
+.keys dt { font: 0.875rem var(--mono); }
+.keys dd { margin: 0; color: var(--muted); }
+
+footer { margin-block-start: 4rem; padding-block-start: 1.5rem; border-block-start: 1px solid var(--line); color: var(--muted); font-size: 0.875rem; }
+footer a, section a { color: inherit; text-underline-offset: 0.2em; }
+</style>
+</head>
+<body>
+<main>
+  <header class="hero">
+    <img class="enter" style="--i: 0" src="icon.svg" width="48" height="48" alt="">
+    <h1 class="enter" style="--i: 1">yubel</h1>
+    <p class="enter" style="--i: 2">Text that morphs into its next value. Shared letters slide, new ones fade in, and digits roll by place value. One Reanimated component for iOS, Android, and web.</p>
+    <div class="actions enter" style="--i: 3">
+      <a class="button primary" href="#install">Get started <svg xmlns="http://www.w3.org/2000/svg" class="i" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M8 2a.75.75 0 0 1 .75.75v8.69l3.22-3.22a.75.75 0 1 1 1.06 1.06l-4.5 4.5a.75.75 0 0 1-1.06 0l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.22 3.22V2.75A.75.75 0 0 1 8 2" clip-rule="evenodd"/></svg></a>
+      <a class="button" href="https://github.com/glpecile/yubel"><svg xmlns="http://www.w3.org/2000/svg" class="i" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12c0 5.303 3.438 9.8 8.205 11.385c.6.113.82-.258.82-.577c0-.285-.01-1.04-.015-2.04c-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729c1.205.084 1.838 1.236 1.838 1.236c1.07 1.835 2.809 1.305 3.495.998c.108-.776.417-1.305.76-1.605c-2.665-.3-5.466-1.332-5.466-5.93c0-1.31.465-2.38 1.235-3.22c-.135-.303-.54-1.523.105-3.176c0 0 1.005-.322 3.3 1.23c.96-.267 1.98-.399 3-.405c1.02.006 2.04.138 3 .405c2.28-1.552 3.285-1.23 3.285-1.23c.645 1.653.24 2.873.12 3.176c.765.84 1.23 1.91 1.23 3.22c0 4.61-2.805 5.625-5.475 5.92c.42.36.81 1.096.81 2.22c0 1.606-.015 2.896-.015 3.286c0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg> GitHub</a>
+    </div>
+  </header>
+
+  <div class="breakout enter" style="--i: 4">
+    <iframe class="demo" src="demo/" title="Live demo of MorphText" loading="lazy"></iframe>
+  </div>
+  <p class="hint enter" style="--i: 5">Press a chip again to step it, or type in the field.</p>
+
+  <section id="install" class="enter" style="--i: 6">
+    <h2>Install</h2>
+    <p>In an Expo app:</p>
+    <div class="code"><pre><code>npx expo install yubel react-native-reanimated react-native-worklets</code></pre><button class="copy" type="button" aria-label="Copy"><svg xmlns="http://www.w3.org/2000/svg" class="i" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M11.986 3H12a2 2 0 0 1 2 2v6a2 2 0 0 1-1.5 1.937v-2.523a2.5 2.5 0 0 0-.732-1.768L8.354 5.232A2.5 2.5 0 0 0 6.586 4.5H4.063A2 2 0 0 1 6 3h.014A2.25 2.25 0 0 1 8.25 1h1.5a2.25 2.25 0 0 1 2.236 2M10.5 4v-.75a.75.75 0 0 0-.75-.75h-1.5a.75.75 0 0 0-.75.75V4z" clip-rule="evenodd"/><path fill="currentColor" d="M3 6a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1v-3.586a1 1 0 0 0-.293-.707L7.293 6.293A1 1 0 0 0 6.586 6z"/></svg></button></div>
+    <p>yubel ships TypeScript source for Metro, so it needs no native build of its own.</p>
+  </section>
+
+  <section>
+    <h2>Use</h2>
+    <div class="code"><pre><code>import { MorphText } from 'yubel';
+
+&lt;MorphText style={{ fontSize: 24, alignSelf: 'flex-start' }}&gt;
+  {count}
+&lt;/MorphText&gt;</code></pre><button class="copy" type="button" aria-label="Copy"><svg xmlns="http://www.w3.org/2000/svg" class="i" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M11.986 3H12a2 2 0 0 1 2 2v6a2 2 0 0 1-1.5 1.937v-2.523a2.5 2.5 0 0 0-.732-1.768L8.354 5.232A2.5 2.5 0 0 0 6.586 4.5H4.063A2 2 0 0 1 6 3h.014A2.25 2.25 0 0 1 8.25 1h1.5a2.25 2.25 0 0 1 2.236 2M10.5 4v-.75a.75.75 0 0 0-.75-.75h-1.5a.75.75 0 0 0-.75.75V4z" clip-rule="evenodd"/><path fill="currentColor" d="M3 6a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1v-3.586a1 1 0 0 0-.293-.707L7.293 6.293A1 1 0 0 0 6.586 6z"/></svg></button></div>
+    <dl class="keys">
+      <dt>children</dt><dd>The text, a string or a number. A change morphs in place.</dd>
+      <dt>style</dt><dd>Text styles reach every glyph. Margins and alignment reach the outer box.</dd>
+      <dt>className</dt><dd>The same split, for apps that resolve classes on core components, such as Uniwind.</dd>
+      <dt>numberOfLines</dt><dd>Turns the morph off and renders plain text.</dd>
+    </dl>
+  </section>
+
+  <section>
+    <h2>Behavior</h2>
+    <ul>
+      <li>The first render does not animate. At rest, the text is one plain <code>Text</code>.</li>
+      <li>Numbers match digits by place value and align on the decimal point, so 99 to 100 rolls every digit and 1.5 to 12.5 keeps the point.</li>
+      <li>Reduced motion swaps the text with no animation. Screen readers read the whole string once.</li>
+      <li>One line. It does not wrap while it morphs.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <a href="https://github.com/glpecile/yubel">GitHub</a> · A port of <a href="https://github.com/lochie/torph">torph</a> by Lochie Axon (MIT)
+  </footer>
+</main>
+
+<script>
+const COPY = '<svg xmlns="http://www.w3.org/2000/svg" class="i" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M11.986 3H12a2 2 0 0 1 2 2v6a2 2 0 0 1-1.5 1.937v-2.523a2.5 2.5 0 0 0-.732-1.768L8.354 5.232A2.5 2.5 0 0 0 6.586 4.5H4.063A2 2 0 0 1 6 3h.014A2.25 2.25 0 0 1 8.25 1h1.5a2.25 2.25 0 0 1 2.236 2M10.5 4v-.75a.75.75 0 0 0-.75-.75h-1.5a.75.75 0 0 0-.75.75V4z" clip-rule="evenodd"/><path fill="currentColor" d="M3 6a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1v-3.586a1 1 0 0 0-.293-.707L7.293 6.293A1 1 0 0 0 6.586 6z"/></svg>';
+const CHECK = '<svg xmlns="http://www.w3.org/2000/svg" class="i" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M12.416 3.376a.75.75 0 0 1 .208 1.04l-5 7.5a.75.75 0 0 1-1.154.114l-3-3a.75.75 0 0 1 1.06-1.06l2.353 2.353l4.493-6.74a.75.75 0 0 1 1.04-.207" clip-rule="evenodd"/></svg>';
+document.querySelectorAll('.copy').forEach((b) => b.addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(b.previousElementSibling.textContent);
+  } catch {
+    return; // no clipboard access: the text stays selectable
+  }
+  b.innerHTML = CHECK;
+  b.setAttribute('aria-label', 'Copied');
+  setTimeout(() => { b.innerHTML = COPY; b.setAttribute('aria-label', 'Copy'); }, 1500);
+}));
+</script>
+</body>
+</html>

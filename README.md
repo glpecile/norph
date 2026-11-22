@@ -4,6 +4,8 @@ Text that morphs into its next value, on iOS, Android, and web. It is a
 Reanimated port of [torph](https://github.com/lochie/torph)'s React component.
 One implementation runs everywhere, on the web through react-native-web.
 
+[Try the live demo](https://glpecile.github.io/yubel/).
+
 ```tsx
 import { MorphText } from 'yubel';
 
@@ -43,6 +45,12 @@ import { MorphText } from 'yubel';
 
 `react`, `react-native`, `react-native-reanimated` 4, and `react-native-worklets`.
 The package ships TypeScript source for Metro to compile.
+
+## Develop
+
+`bun test` runs the diff tests and `bun run typecheck` checks types. The demo
+lives in `example/`: `cd example && bun install && bun web` runs it, and
+`bun run export` builds it into `site/demo/` for the site in `site/`.
 
 ## License
 
