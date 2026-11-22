@@ -19,7 +19,15 @@
   --muted: light-dark(oklch(0.48 0 none), oklch(0.7 0 none));
   --line: light-dark(oklch(0.92 0 none), oklch(0.27 0 none));
   --soft: light-dark(oklch(0.97 0 none), oklch(0.2 0 none));
-  --ring: light-dark(oklch(0.55 0.16 255), oklch(0.72 0.13 255));
+  /* One hue per role, the same L in each theme and the same share of each hue's chroma ceiling. */
+  --violet: light-dark(oklch(0.52 0.236 300), oklch(0.8 0.083 300));
+  --green: light-dark(oklch(0.52 0.122 150), oklch(0.8 0.154 150));
+  --amber: light-dark(oklch(0.52 0.096 70), oklch(0.8 0.114 70));
+  --blue: light-dark(oklch(0.52 0.146 255), oklch(0.8 0.072 255));
+  --pink: light-dark(oklch(0.52 0.185 350), oklch(0.8 0.096 350));
+  --accent: var(--violet);
+  --on-accent: light-dark(oklch(1 0 none), oklch(0.16 0 none));
+  --ring: var(--accent);
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --mono: ui-monospace, "Geist Mono", "SF Mono", Menlo, Consolas, monospace;
   --text-h1: clamp(1.75rem, 1.5rem + 1vw, 2.25rem);
@@ -84,21 +92,21 @@ h1 { font-size: var(--text-h1); font-weight: 600; letter-spacing: -0.02em; line-
   text-decoration: none;
   cursor: pointer;
 }
-.button.primary { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.button.primary { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
 .button:active { transform: scale(0.97); }
 @media (hover: hover) and (pointer: fine) {
   .button:hover { background: var(--soft); }
-  .button.primary:hover { background: color-mix(in oklch, var(--fg), var(--bg) 15%); }
+  .button.primary:hover { background: color-mix(in oklch, var(--accent), var(--bg) 15%); }
 }
 
 /* The demo is the real component, exported from example/ with react-native-web. */
 .demo {
   display: block;
   inline-size: 100%;
-  block-size: 20rem;
+  block-size: 22rem;
   border: 1px solid var(--line);
   border-radius: 0.875rem;
-  background: var(--soft);
+  background: radial-gradient(120% 90% at 50% 0%, color-mix(in oklch, var(--accent) 14%, transparent), transparent 70%), var(--soft);
   color-scheme: light dark;
 }
 .hint { color: var(--muted); font-size: 0.875rem; margin: 0.75rem 0 0; }
@@ -115,7 +123,8 @@ h1 { font-size: var(--text-h1); font-weight: 600; letter-spacing: -0.02em; line-
 @keyframes fade { from { opacity: 0; } }
 
 section { margin-block-start: 3.5rem; }
-h2 { font-size: 1rem; font-weight: 600; margin: 0 0 0.75rem; }
+h2 { display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; font-weight: 600; margin: 0 0 0.75rem; }
+h2 .i { color: var(--accent); }
 section > p, section li { color: var(--muted); }
 section > p { margin: 0 0 0.75rem; }
 section > ul { margin: 0; padding-inline-start: 1.25rem; display: grid; gap: 0.375rem; }
@@ -131,6 +140,7 @@ section code { font: 0.875em var(--mono); color: var(--fg); }
   border-radius: 0.625rem;
   background: var(--soft);
 }
+.code[hidden] { display: none; }
 .code pre {
   flex: 1;
   margin: 0;
@@ -160,8 +170,38 @@ section code { font: 0.875em var(--mono); color: var(--fg); }
 .keys dt { font: 0.875rem var(--mono); }
 .keys dd { margin: 0; color: var(--muted); }
 
+/* style and className versions of the same snippet. */
+.tabs { display: flex; gap: 0.25rem; margin: 0 0 0.5rem; }
+.tab {
+  border: 1px solid transparent;
+  background: transparent;
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem;
+  color: var(--muted);
+  font: 400 0.8125rem/1.5 var(--mono);
+  cursor: pointer;
+}
+.tab[aria-selected="true"] { color: var(--accent); border-color: color-mix(in oklch, var(--accent) 35%, transparent); background: color-mix(in oklch, var(--accent) 10%, transparent); }
+@media (hover: hover) and (pointer: fine) { .tab:hover { color: var(--fg); } }
+.code .note { color: var(--muted); }
+
+.features { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 0.75rem; margin: 0; padding: 0; list-style: none; }
+.feature { border: 1px solid var(--line); border-radius: 0.75rem; padding: 0.875rem 1rem; }
+.feature .badge {
+  display: grid;
+  place-items: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  margin-block-end: 0.625rem;
+  border-radius: 0.5rem;
+  color: var(--tone);
+  background: color-mix(in oklch, var(--tone) 14%, transparent);
+}
+.feature strong { display: block; color: var(--fg); font-weight: 600; }
+.feature span { color: var(--muted); font-size: 0.875rem; }
+
 footer { margin-block-start: 4rem; padding-block-start: 1.5rem; border-block-start: 1px solid var(--line); color: var(--muted); font-size: 0.875rem; }
-footer a, section a { color: inherit; text-underline-offset: 0.2em; }
+footer a, section a { color: inherit; text-underline-offset: 0.2em; text-decoration-color: var(--accent); }
 </style>
 </head>
 <body>
@@ -179,20 +219,31 @@ footer a, section a { color: inherit; text-underline-offset: 0.2em; }
   <div class="breakout enter" style="--i: 4">
     <iframe class="demo" src="demo/" title="Live demo of MorphText" loading="lazy"></iframe>
   </div>
-  <p class="hint enter" style="--i: 5">Press a chip again to step it, or type in the field.</p>
+  <p class="hint enter" style="--i: 5">Press a chip again to step it. Count and Price also take −, +, and Shuffle. Or type in the field.</p>
 
   <section id="install" class="enter" style="--i: 6">
-    <h2>Install</h2>
+    <h2><svg class="i" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M10.75 2.75a.75.75 0 0 0-1.5 0v8.614L6.295 8.235a.75.75 0 1 0-1.09 1.03l4.25 4.5a.75.75 0 0 0 1.09 0l4.25-4.5a.75.75 0 0 0-1.09-1.03l-2.955 3.129V2.75Z"/><path d="M3.5 12.75a.75.75 0 0 0-1.5 0v2.5A2.75 2.75 0 0 0 4.75 18h10.5A2.75 2.75 0 0 0 18 15.25v-2.5a.75.75 0 0 0-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5Z"/></svg> Install</h2>
     <p>In an Expo app:</p>
     <div class="code"><pre><code>npx expo install norph react-native-reanimated react-native-worklets</code></pre><button class="copy" type="button" aria-label="Copy"><svg xmlns="http://www.w3.org/2000/svg" class="i" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M11.986 3H12a2 2 0 0 1 2 2v6a2 2 0 0 1-1.5 1.937v-2.523a2.5 2.5 0 0 0-.732-1.768L8.354 5.232A2.5 2.5 0 0 0 6.586 4.5H4.063A2 2 0 0 1 6 3h.014A2.25 2.25 0 0 1 8.25 1h1.5a2.25 2.25 0 0 1 2.236 2M10.5 4v-.75a.75.75 0 0 0-.75-.75h-1.5a.75.75 0 0 0-.75.75V4z" clip-rule="evenodd"/><path fill="currentColor" d="M3 6a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1v-3.586a1 1 0 0 0-.293-.707L7.293 6.293A1 1 0 0 0 6.586 6z"/></svg></button></div>
     <p>norph ships TypeScript source for Metro, so it needs no native build of its own.</p>
   </section>
 
   <section>
-    <h2>Use</h2>
-    <div class="code"><pre><code>import { MorphText } from 'norph';
+    <h2><svg class="i" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.28 5.22a.75.75 0 0 1 0 1.06L2.56 10l3.72 3.72a.75.75 0 0 1-1.06 1.06L.97 10.53a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Zm7.44 0a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L17.44 10l-3.72-3.72a.75.75 0 0 1 0-1.06ZM11.377 2.011a.75.75 0 0 1 .612.867l-2.5 14.5a.75.75 0 0 1-1.478-.255l2.5-14.5a.75.75 0 0 1 .866-.612Z" clip-rule="evenodd"/></svg> Use</h2>
+    <div class="tabs" role="tablist" aria-label="Styling">
+      <button class="tab" type="button" role="tab" id="tab-style" aria-controls="panel-style" aria-selected="true">style</button>
+      <button class="tab" type="button" role="tab" id="tab-class" aria-controls="panel-class" aria-selected="false" tabindex="-1">className</button>
+    </div>
+    <div class="code" id="panel-style" role="tabpanel" aria-labelledby="tab-style"><pre><code>import { MorphText } from 'norph';
 
 &lt;MorphText style={{ fontSize: 24, alignSelf: 'flex-start' }}&gt;
+  {count}
+&lt;/MorphText&gt;</code></pre><button class="copy" type="button" aria-label="Copy"><svg xmlns="http://www.w3.org/2000/svg" class="i" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M11.986 3H12a2 2 0 0 1 2 2v6a2 2 0 0 1-1.5 1.937v-2.523a2.5 2.5 0 0 0-.732-1.768L8.354 5.232A2.5 2.5 0 0 0 6.586 4.5H4.063A2 2 0 0 1 6 3h.014A2.25 2.25 0 0 1 8.25 1h1.5a2.25 2.25 0 0 1 2.236 2M10.5 4v-.75a.75.75 0 0 0-.75-.75h-1.5a.75.75 0 0 0-.75.75V4z" clip-rule="evenodd"/><path fill="currentColor" d="M3 6a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1v-3.586a1 1 0 0 0-.293-.707L7.293 6.293A1 1 0 0 0 6.586 6z"/></svg></button></div>
+    <div class="code" id="panel-class" role="tabpanel" aria-labelledby="tab-class" hidden><pre><code>import { MorphText } from 'norph';
+
+<span class="note">// With Uniwind. Text classes style each
+// glyph, layout classes the outer box.</span>
+&lt;MorphText className="text-2xl font-semibold text-violet-600 self-start"&gt;
   {count}
 &lt;/MorphText&gt;</code></pre><button class="copy" type="button" aria-label="Copy"><svg xmlns="http://www.w3.org/2000/svg" class="i" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M11.986 3H12a2 2 0 0 1 2 2v6a2 2 0 0 1-1.5 1.937v-2.523a2.5 2.5 0 0 0-.732-1.768L8.354 5.232A2.5 2.5 0 0 0 6.586 4.5H4.063A2 2 0 0 1 6 3h.014A2.25 2.25 0 0 1 8.25 1h1.5a2.25 2.25 0 0 1 2.236 2M10.5 4v-.75a.75.75 0 0 0-.75-.75h-1.5a.75.75 0 0 0-.75.75V4z" clip-rule="evenodd"/><path fill="currentColor" d="M3 6a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1v-3.586a1 1 0 0 0-.293-.707L7.293 6.293A1 1 0 0 0 6.586 6z"/></svg></button></div>
     <dl class="keys">
@@ -204,23 +255,45 @@ footer a, section a { color: inherit; text-underline-offset: 0.2em; }
   </section>
 
   <section>
-    <h2>Behavior</h2>
-    <ul>
-      <li>The first render does not animate. At rest, the text is one plain <code>Text</code>.</li>
-      <li>Numbers match digits by place value and align on the decimal point, so 99 to 100 rolls every digit and 1.5 to 12.5 keeps the point.</li>
-      <li>Reduced motion swaps the text with no animation. Screen readers read the whole string once.</li>
-      <li>One line. It does not wrap while it morphs.</li>
+    <h2><svg class="i" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M15.98 1.804a1 1 0 0 0-1.96 0l-.24 1.192a1 1 0 0 1-.784.785l-1.192.238a1 1 0 0 0 0 1.962l1.192.238a1 1 0 0 1 .785.785l.238 1.192a1 1 0 0 0 1.962 0l.238-1.192a1 1 0 0 1 .785-.785l1.192-.238a1 1 0 0 0 0-1.962l-1.192-.238a1 1 0 0 1-.785-.785l-.238-1.192ZM6.949 5.684a1 1 0 0 0-1.898 0l-.683 2.051a1 1 0 0 1-.633.633l-2.051.683a1 1 0 0 0 0 1.898l2.051.684a1 1 0 0 1 .633.632l.683 2.051a1 1 0 0 0 1.898 0l.683-2.051a1 1 0 0 1 .633-.633l2.051-.683a1 1 0 0 0 0-1.898l-2.051-.683a1 1 0 0 1-.633-.633L6.95 5.684ZM13.949 13.684a1 1 0 0 0-1.898 0l-.184.551a1 1 0 0 1-.632.633l-.551.183a1 1 0 0 0 0 1.898l.551.183a1 1 0 0 1 .633.633l.183.551a1 1 0 0 0 1.898 0l.184-.551a1 1 0 0 1 .632-.633l.551-.183a1 1 0 0 0 0-1.898l-.551-.184a1 1 0 0 1-.633-.632l-.183-.551Z"/></svg> Behavior</h2>
+    <ul class="features">
+      <li class="feature" style="--tone: var(--violet)"><span class="badge"><svg class="i" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M13.2 2.24a.75.75 0 0 0 .04 1.06l2.1 1.95H6.75a.75.75 0 0 0 0 1.5h8.59l-2.1 1.95a.75.75 0 1 0 1.02 1.1l3.5-3.25a.75.75 0 0 0 0-1.1l-3.5-3.25a.75.75 0 0 0-1.06.04Zm-6.4 8a.75.75 0 0 0-1.06-.04l-3.5 3.25a.75.75 0 0 0 0 1.1l3.5 3.25a.75.75 0 1 0 1.02-1.1l-2.1-1.95h8.59a.75.75 0 0 0 0-1.5H4.66l2.1-1.95a.75.75 0 0 0 .04-1.06Z" clip-rule="evenodd"/></svg></span><strong>Shared letters slide</strong><span>The old and new text keep what they share. New letters fade in and dropped ones fade out.</span></li>
+      <li class="feature" style="--tone: var(--green)"><span class="badge"><svg class="i" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9.493 2.852a.75.75 0 0 0-1.486-.204L7.545 6H4.198a.75.75 0 0 0 0 1.5h3.14l-.69 5H3.302a.75.75 0 0 0 0 1.5h3.14l-.435 3.148a.75.75 0 0 0 1.486.204L7.955 14h2.986l-.434 3.148a.75.75 0 0 0 1.486.204L12.456 14h3.346a.75.75 0 0 0 0-1.5h-3.14l.69-5h3.346a.75.75 0 0 0 0-1.5h-3.14l.435-3.148a.75.75 0 0 0-1.486-.204L12.045 6H9.059l.434-3.148ZM8.852 7.5l-.69 5h2.986l.69-5H8.852Z" clip-rule="evenodd"/></svg></span><strong>Digits roll by place value</strong><span>99 to 100 rolls every digit, and 1.5 to 12.5 keeps the decimal point.</span></li>
+      <li class="feature" style="--tone: var(--amber)"><span class="badge"><svg class="i" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M11.983 1.907a.75.75 0 0 0-1.292-.657l-8.5 9.5A.75.75 0 0 0 2.75 12h6.572l-1.305 6.093a.75.75 0 0 0 1.292.657l8.5-9.5A.75.75 0 0 0 17.25 8h-6.572l1.305-6.093Z"/></svg></span><strong>Plain text at rest</strong><span>The first render does not animate. Between morphs the text is one plain Text.</span></li>
+      <li class="feature" style="--tone: var(--blue)"><span class="badge"><svg class="i" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 16.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"/><path fill-rule="evenodd" d="M4 4a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V4Zm4-1.5v.75c0 .414.336.75.75.75h2.5a.75.75 0 0 0 .75-.75V2.5h1A1.5 1.5 0 0 1 14.5 4v12a1.5 1.5 0 0 1-1.5 1.5H7A1.5 1.5 0 0 1 5.5 16V4A1.5 1.5 0 0 1 7 2.5h1Z" clip-rule="evenodd"/></svg></span><strong>iOS, Android, and web</strong><span>One Reanimated component, on the web through react-native-web.</span></li>
+      <li class="feature" style="--tone: var(--pink)"><span class="badge"><svg class="i" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M2 10a8 8 0 1 1 16 0 8 8 0 0 1-16 0Zm5-2.25A.75.75 0 0 1 7.75 7h.5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-.75.75h-.5a.75.75 0 0 1-.75-.75v-4.5Zm4 0a.75.75 0 0 1 .75-.75h.5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-.75.75h-.5a.75.75 0 0 1-.75-.75v-4.5Z" clip-rule="evenodd"/></svg></span><strong>Reduced motion</strong><span>The text swaps with no animation when the system asks for less motion.</span></li>
+      <li class="feature" style="--tone: var(--violet)"><span class="badge"><svg class="i" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M10.5 3.75a.75.75 0 0 0-1.264-.546L5.203 7H2.667a.75.75 0 0 0-.7.48A6.985 6.985 0 0 0 1.5 10c0 .887.165 1.737.468 2.52.111.29.39.48.7.48h2.535l4.033 3.796a.75.75 0 0 0 1.264-.546V3.75ZM16.45 5.05a.75.75 0 0 0-1.06 1.061 5.5 5.5 0 0 1 0 7.778.75.75 0 0 0 1.06 1.06 7 7 0 0 0 0-9.899Z"/><path d="M14.329 7.172a.75.75 0 0 0-1.061 1.06 2.5 2.5 0 0 1 0 3.536.75.75 0 0 0 1.06 1.06 4 4 0 0 0 0-5.656Z"/></svg></span><strong>Screen readers</strong><span>They read the whole string once, never one glyph at a time.</span></li>
     </ul>
+    <p class="hint">One line: the text never wraps. Text too long for its box ends in an ellipsis.</p>
   </section>
 
   <footer>
-    <a href="https://github.com/glpecile/norph">GitHub</a> · A port of <a href="https://github.com/lochie/torph">torph</a> by Lochie Axon (MIT)
+    <a href="https://github.com/glpecile/norph">GitHub</a> · A port of <a href="https://github.com/lochie/torph">torph</a> by Lochie Axon (MIT) · Icons from <a href="https://heroicons.com">Heroicons</a> (MIT)
   </footer>
 </main>
 
 <script>
 const COPY = '<svg xmlns="http://www.w3.org/2000/svg" class="i" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M11.986 3H12a2 2 0 0 1 2 2v6a2 2 0 0 1-1.5 1.937v-2.523a2.5 2.5 0 0 0-.732-1.768L8.354 5.232A2.5 2.5 0 0 0 6.586 4.5H4.063A2 2 0 0 1 6 3h.014A2.25 2.25 0 0 1 8.25 1h1.5a2.25 2.25 0 0 1 2.236 2M10.5 4v-.75a.75.75 0 0 0-.75-.75h-1.5a.75.75 0 0 0-.75.75V4z" clip-rule="evenodd"/><path fill="currentColor" d="M3 6a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1v-3.586a1 1 0 0 0-.293-.707L7.293 6.293A1 1 0 0 0 6.586 6z"/></svg>';
 const CHECK = '<svg xmlns="http://www.w3.org/2000/svg" class="i" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M12.416 3.376a.75.75 0 0 1 .208 1.04l-5 7.5a.75.75 0 0 1-1.154.114l-3-3a.75.75 0 0 1 1.06-1.06l2.353 2.353l4.493-6.74a.75.75 0 0 1 1.04-.207" clip-rule="evenodd"/></svg>';
+const tabs = [...document.querySelectorAll('[role="tab"]')];
+function select(tab) {
+  for (const t of tabs) {
+    const on = t === tab;
+    t.setAttribute('aria-selected', String(on));
+    t.tabIndex = on ? 0 : -1;
+    document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+  }
+}
+tabs.forEach((t, i) => {
+  t.addEventListener('click', () => select(t));
+  t.addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+    select(next);
+    next.focus();
+  });
+});
+
 document.querySelectorAll('.copy').forEach((b) => b.addEventListener('click', async () => {
   try {
     await navigator.clipboard.writeText(b.previousElementSibling.textContent);
