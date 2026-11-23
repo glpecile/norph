@@ -1,5 +1,5 @@
 {
-  "name": "norph",
+  "name": "@glpecile/norph",
   "version": "0.1.0",
   "description": "Text that morphs into its next value, on iOS, Android, and web. A Reanimated port of torph.",
   "license": "MIT",
@@ -10,6 +10,9 @@
   },
   "keywords": ["react-native", "reanimated", "text", "animation", "morph"],
   "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "src/index.tsx",
   "types": "src/index.tsx",
   "react-native": "src/index.tsx",

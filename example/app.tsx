@@ -8,7 +8,7 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
-import { MorphText } from 'norph';
+import { MorphText } from '@glpecile/norph';
 
 // The site's palette in hex, since native has no oklch(): each hue at L 0.52
 // (light) and L 0.8 (dark), at one share of its chroma ceiling.

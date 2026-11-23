@@ -11,9 +11,9 @@ One implementation runs everywhere, on the web through react-native-web.
 In an Expo app, `expo install` picks the Reanimated version that matches your SDK:
 
 ```sh
-npx expo install norph react-native-reanimated react-native-worklets   # npm
-bunx expo install norph react-native-reanimated react-native-worklets  # bun
-pnpm expo install norph react-native-reanimated react-native-worklets  # pnpm
+npx expo install @glpecile/norph react-native-reanimated react-native-worklets   # npm
+bunx expo install @glpecile/norph react-native-reanimated react-native-worklets  # bun
+pnpm expo install @glpecile/norph react-native-reanimated react-native-worklets  # pnpm
 ```
 
 Outside Expo, add the same three packages with your package manager.
@@ -21,7 +21,7 @@ Outside Expo, add the same three packages with your package manager.
 ## Use
 
 ```tsx
-import { MorphText } from 'norph';
+import { MorphText } from '@glpecile/norph';
 
 <MorphText className="text-2xl text-foreground self-start">{count}</MorphText>;
 ```

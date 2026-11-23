@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "norph",
+      "name": "@glpecile/norph",
       "devDependencies": {
         "@types/bun": "latest",
         "@types/react": "~19.3.0",
