@@ -1,6 +1,6 @@
 {
   "name": "@glpecile/norph",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Text that morphs into its next value, on iOS, Android, and web. A Reanimated port of torph.",
   "license": "MIT",
   "author": "Gian Luca Pecile",
