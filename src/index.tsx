@@ -255,8 +255,11 @@ export function MorphText({ children, className, style, numberOfLines }: MorphTe
   return (
     <View className={className} style={style}>
       {motion ? (
-        <>
-          <Sizer width={motion.width} height={motion.height}>
+        <Sizer width={motion.width} height={motion.height}>
+          <Text className={className} style={[style, RESET, styles.reader]} numberOfLines={1}>
+            {shown.text}
+          </Text>
+          <View aria-hidden style={StyleSheet.absoluteFill}>
             {motion.glyphs.map((glyph) => (
               <GlyphView
                 key={glyph.key}
@@ -266,11 +269,8 @@ export function MorphText({ children, className, style, numberOfLines }: MorphTe
                 style={style}
               />
             ))}
-          </Sizer>
-          <Text style={styles.reader} numberOfLines={1}>
-            {shown.text}
-          </Text>
-        </>
+          </View>
+        </Sizer>
       ) : (
         // One line at rest too, so a morph never unwraps the text.
         <Text className={className} style={[style, RESET]} numberOfLines={1}>
@@ -302,7 +302,7 @@ export function MorphText({ children, className, style, numberOfLines }: MorphTe
 function Sizer({ width, height, children }: { width: SharedValue<number>; height: number; children: ReactNode }) {
   const animated = useAnimatedStyle(() => ({ width: width.value }));
   return (
-    <Animated.View aria-hidden style={[{ height }, animated]}>
+    <Animated.View style={[{ height }, animated]}>
       {children}
     </Animated.View>
   );
@@ -366,8 +366,11 @@ const styles = StyleSheet.create({
   glyph: { position: 'absolute', left: 0, top: 0 },
   // A rolling digit slides a full line, so its slot clips it.
   slot: { overflow: 'hidden' },
-  // The whole string once for screen readers while the glyphs, hidden from them, move.
-  reader: { ...StyleSheet.absoluteFill, color: 'transparent' },
+  // The whole string once, unseen, while the glyphs move. Screen readers read
+  // it, and it is the box's only text in the layout flow, so it gives the box
+  // the baseline the text at rest has. Not `transparent`: Android reads that
+  // value as no color and draws the text in the default one.
+  reader: { color: '#00000001' },
   // Lays both rows out unconstrained and unseen; the wide row never wraps a word.
   measure: { position: 'absolute', width: 0, height: 0, overflow: 'hidden' },
   row: { position: 'absolute', top: 0, left: 0, width: 10000, flexDirection: 'row', alignItems: 'flex-start' },
