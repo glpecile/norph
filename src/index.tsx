@@ -253,7 +253,7 @@ export function MorphText({ children, className, style, numberOfLines }: MorphTe
   };
 
   // One line at rest too, so a morph never unwraps the text. While the glyphs
-  // move, the same text is the reader, so the box keeps its baseline.
+  // move, a copy of it in the sizer is the reader, so the box keeps its baseline.
   const label = (
     <Text className={className} style={[style, RESET, motion && styles.reader]} numberOfLines={1}>
       {shown.text}
