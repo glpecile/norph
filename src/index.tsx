@@ -368,8 +368,9 @@ const styles = StyleSheet.create({
   // The whole string once, unseen, while the glyphs move. Screen readers read
   // it, and it is the box's only text in the layout flow, so it gives the box
   // the baseline the text at rest has. Not `transparent`: Android reads that
-  // value as no color and draws the text in the default one.
-  reader: { color: '#00000001' },
+  // value as no color and draws the text in the default one. A shadow and an
+  // underline keep their own color, so they go too.
+  reader: { color: '#00000001', textShadowRadius: 0, textShadowOffset: { width: 0, height: 0 }, textDecorationLine: 'none' },
   // Lays both rows out unconstrained and unseen; the wide row never wraps a word.
   measure: { position: 'absolute', width: 0, height: 0, overflow: 'hidden' },
   row: { position: 'absolute', top: 0, left: 0, width: 10000, flexDirection: 'row', alignItems: 'flex-start' },
