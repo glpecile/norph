@@ -252,13 +252,19 @@ export function MorphText({ children, className, style, numberOfLines }: MorphTe
     }
   };
 
+  // One line at rest too, so a morph never unwraps the text. While the glyphs
+  // move, the same text is the reader, so the box keeps its baseline.
+  const label = (
+    <Text className={className} style={[style, RESET, motion && styles.reader]} numberOfLines={1}>
+      {shown.text}
+    </Text>
+  );
+
   return (
     <View className={className} style={style}>
       {motion ? (
         <Sizer width={motion.width} height={motion.height}>
-          <Text className={className} style={[style, RESET, styles.reader]} numberOfLines={1}>
-            {shown.text}
-          </Text>
+          {label}
           {motion.glyphs.map((glyph) => (
             <GlyphView
               key={glyph.key}
@@ -269,12 +275,7 @@ export function MorphText({ children, className, style, numberOfLines }: MorphTe
             />
           ))}
         </Sizer>
-      ) : (
-        // One line at rest too, so a morph never unwraps the text.
-        <Text className={className} style={[style, RESET]} numberOfLines={1}>
-          {shown.text}
-        </Text>
-      )}
+      ) : label}
       {pending ? (
         <View key={text} style={styles.measure} aria-hidden>
           {(['before', 'after'] as const).map((row) => (
