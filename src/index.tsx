@@ -259,17 +259,15 @@ export function MorphText({ children, className, style, numberOfLines }: MorphTe
           <Text className={className} style={[style, RESET, styles.reader]} numberOfLines={1}>
             {shown.text}
           </Text>
-          <View aria-hidden style={StyleSheet.absoluteFill}>
-            {motion.glyphs.map((glyph) => (
-              <GlyphView
-                key={glyph.key}
-                glyph={glyph}
-                height={motion.height}
-                className={className}
-                style={style}
-              />
-            ))}
-          </View>
+          {motion.glyphs.map((glyph) => (
+            <GlyphView
+              key={glyph.key}
+              glyph={glyph}
+              height={motion.height}
+              className={className}
+              style={style}
+            />
+          ))}
         </Sizer>
       ) : (
         // One line at rest too, so a morph never unwraps the text.
@@ -329,7 +327,7 @@ function GlyphView({
   }));
   return (
     // One spare point of width, so rounding never wraps the glyph.
-    <Animated.View style={[styles.glyph, { width: width + 1, height }, rolls && styles.slot, outer]}>
+    <Animated.View aria-hidden style={[styles.glyph, { width: width + 1, height }, rolls && styles.slot, outer]}>
       <Animated.View style={inner}>
         <Text className={className} style={[style, RESET]}>
           {string}
